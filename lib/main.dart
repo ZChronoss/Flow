@@ -1,5 +1,10 @@
+import 'package:flow/page/focus.dart';
+import 'package:flow/page/home.dart';
+import 'package:flow/page/notes.dart';
+import 'package:flow/page/tasks.dart';
 import 'package:flutter/material.dart';
-import 'package:table_calendar/table_calendar.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hexcolor/hexcolor.dart';
 
 void main() {
   runApp(const Calendar());
@@ -13,72 +18,75 @@ class Calendar extends StatefulWidget {
 }
 
 class _CalendarState extends State<Calendar> {
-
-  DateTime today = DateTime.now();
-
-  void _onDaySelected(DateTime day, DateTime focusedDay){
-    setState(() {
-      today = day;
-    });
-  }
+  // buat bottom nav bar
+  int _currentIndex = 0;
+  final tabs = <Widget>[
+    const Home(),
+    const Tasks(),
+    const Notes(),
+    const FocusPage()
+  ];
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        scaffoldBackgroundColor: const Color.fromRGBO(32, 33, 36, 1)
+        scaffoldBackgroundColor: HexColor("202124")
       ),
       home: Scaffold(
-        body: content(),
-      ),
-    );
-  }
-
-  Widget content(){
-    return Padding(
-      padding: const EdgeInsets.all(20),
-      child: Container(
-        margin: const EdgeInsets.only(
-          bottom: 390
-        ),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: const Color.fromRGBO(57, 57, 57, 1),
-        ),
-        child: 
-          TableCalendar(
-            headerStyle: const HeaderStyle(
-              formatButtonVisible: false,
-              titleCentered: true,
-              titleTextStyle: TextStyle(
-                color: Colors.white
-              ),
-            ),
-            daysOfWeekStyle: const DaysOfWeekStyle(
-              weekdayStyle: TextStyle(
-                color: Color.fromRGBO(183, 183, 183, 1)
-              ),
-              weekendStyle: TextStyle(
-                color: Color.fromRGBO(183, 183, 183, 1)
+        body: tabs[_currentIndex],
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: _currentIndex,
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: const Color.fromRGBO(51, 51, 54, 1),
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          selectedItemColor: const Color.fromRGBO(255, 115, 96, 1),
+          onTap: (index) {
+            setState(() {
+              _currentIndex = index;
+            });
+          },
+          items: [
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset("assets/icons/Home.svg"),
+              label: 'Home',
+              activeIcon: SvgPicture.asset(
+                "assets/icons/Home.svg",
+                colorFilter: ColorFilter.mode(HexColor("FF7360"), BlendMode.srcIn) 
               )
             ),
-            availableGestures: AvailableGestures.all,
-            selectedDayPredicate: (day) => isSameDay(day, today),
-            firstDay: DateTime(2010),
-            focusedDay: today,
-            lastDay: DateTime(2050),
-            onDaySelected:_onDaySelected,
-            calendarStyle: const CalendarStyle(
-              defaultTextStyle: TextStyle(
-                color: Colors.white
-              ),
-              weekendTextStyle: TextStyle(
-                color: Colors.white
-              ),
+
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset("assets/icons/Tasks.svg"),
+              label: 'Tasks',
+              activeIcon: SvgPicture.asset(
+                "assets/icons/Tasks.svg",
+                colorFilter: ColorFilter.mode(HexColor("FF7360"), BlendMode.srcIn) 
+              )
             ),
-          ),
-      )
+
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset("assets/icons/Notes.svg"),
+              label: 'Notes',
+              activeIcon: SvgPicture.asset(
+                "assets/icons/Notes.svg",
+                colorFilter: ColorFilter.mode(HexColor("FF7360"), BlendMode.srcIn) 
+              )
+            ),
+
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset("assets/icons/Focus.svg"),
+              label: 'Focus',
+              activeIcon: SvgPicture.asset(
+                "assets/icons/Focus.svg",
+                colorFilter: ColorFilter.mode(HexColor("D085FF"), BlendMode.srcIn) 
+              )
+            )
+          ],          
+        ),
+      ),
     );
   }
 }
