@@ -50,6 +50,7 @@ class _TasksState extends State<Tasks> {
   }
 
   List<MyEvent> _listOfDayEvents(DateTime dateTime){
+    // DateTime today = dateTime.copyWith(hour: 0, minute: 0, second: 0, microsecond: 0, millisecond: 0);
     return mySelectedEvents[dateTime] ?? [];
   }
 
@@ -60,7 +61,7 @@ class _TasksState extends State<Tasks> {
       children: <Widget>[
         SlidingUpPanel(
           body: SafeArea(
-            child: SingleChildScrollView(
+            child: SingleChildScrollView(              
               child: Column(
                 children: [
                   Card(
@@ -169,8 +170,8 @@ class _TasksState extends State<Tasks> {
                       var endTimeHour = myEvent.endTime.hour.toString().padLeft(2, '0');
                       var endTimeMinute = myEvent.endTime.minute.toString().padLeft(2, '0');
 
-                      return Container(   
-                        margin: const EdgeInsets.fromLTRB(15, 0, 15, 15),                 
+                      return Container(
+                        margin: const EdgeInsets.fromLTRB(15, 0, 15, 15),                        
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             colors: [
@@ -180,60 +181,103 @@ class _TasksState extends State<Tasks> {
                           ),
                           borderRadius: BorderRadius.circular(21)
                         ),
-                        padding: const EdgeInsets.all(14),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SizedBox(
-                              width: 120,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,                            
-                                children: [
-                                  Text(
-                                    myEvent.title,
-                                    style: TextStyle(
-                                      color: HexColor("F5F5F7"),
-                                      fontWeight: FontWeight.bold
-                                    ),
+                        child: ElevatedButton(
+                          onPressed: () => showDialog(
+                            context: context,
+                            builder: (BuildContext context){
+                              return AlertDialog(
+                                title: const Text("Finish the Task"),
+                                content: const Text("Are you done with this task?"),
+                                actions: <Widget>[
+                                  ElevatedButton(
+                                    child: const Text("No"),
+                                    onPressed: () => Navigator.of(context).pop(),
                                   ),
-                                  Text(
-                                    myEvent.description,
-                                    style: TextStyle(
-                                      color: HexColor("F5F5F7"),                                  
-                                    ),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
+                                  ElevatedButton(
+                                    child: const Text("Yes"),
+                                    onPressed: () {
+                                      mySelectedEvents.remove(focusedDate);
+                                      // print(selectedCalendarDay);
+                                      setState(() {
+                                        
+                                      });                            
+                                      Navigator.of(context).pop();
+                                    } 
                                   )
                                 ],
-                              )
+                              );
+                            }
+                          ),                        
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.transparent,
+                            shadowColor: Colors.transparent,
+                            minimumSize: const Size.fromHeight(50),    
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(21)
                             )
-                            ,
-                            Column(
+                          ),
+                          child: Container(   
+                            // margin: const EdgeInsets.fromLTRB(15, 0, 15, 15), 
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(21)
+                            ),
+                            padding: const EdgeInsets.all(14),                                                                        
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  '$startTimeHour:$startTimeMinute', 
-                                  style: TextStyle(
-                                    color: HexColor("B7B7B7")
-                                  ),
-                                ),
-                                Text(
-                                  "-",
-                                  style: TextStyle(
-                                    color: HexColor("B7B7B7")
-                                  ),
-                                ),
-                                Text(
-                                  '$endTimeHour:$endTimeMinute',
-                                  style: TextStyle(
-                                    color: HexColor("B7B7B7")
-                                  ),
+                                SizedBox(
+                                  width: 120,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,                            
+                                    children: [
+                                      Text(
+                                        myEvent.title,
+                                        style: TextStyle(
+                                          color: HexColor("F5F5F7"),
+                                          fontWeight: FontWeight.bold
+                                        ),
+                                      ),
+                                      Text(
+                                        myEvent.description,
+                                        style: TextStyle(
+                                          color: HexColor("F5F5F7"),                                  
+                                        ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      )
+                                    ],
+                                  )
+                                )
+                                ,
+                                Column(
+                                  children: [
+                                    Text(
+                                      '$startTimeHour:$startTimeMinute', 
+                                      style: TextStyle(
+                                        color: HexColor("B7B7B7")
+                                      ),
+                                    ),
+                                    Text(
+                                      "-",
+                                      style: TextStyle(
+                                        color: HexColor("B7B7B7")
+                                      ),
+                                    ),
+                                    Text(
+                                      '$endTimeHour:$endTimeMinute',
+                                      style: TextStyle(
+                                        color: HexColor("B7B7B7")
+                                      ),
+                                    )
+                                  ],
                                 )
                               ],
-                            )
-                          ],
+                            ),
+                          ),
                         ),
                       );
+                       
                     }
                   )
                 ],

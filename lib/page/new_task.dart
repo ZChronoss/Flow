@@ -10,9 +10,9 @@ class NewTask extends StatefulWidget {
   final ScrollController controller;
   final PanelController panelController;
   final DateTime selectedDate;
-  late Map<DateTime, List<MyEvent>> mySelectedEvents;
+  final Map<DateTime, List<MyEvent>> mySelectedEvents;
 
-  NewTask({
+  const NewTask({
     Key? key,
     required this.controller,
     required this.panelController,
@@ -197,7 +197,17 @@ class _NewTaskState extends State<NewTask> {
                           MyEvent(title: titleController.text, description: descController.text, startTime: TimeOfDay.fromDateTime(startTime), endTime: TimeOfDay.fromDateTime(endTime), color: selectedColor)
                         ];
                       }
+                      // copyWith(hour: DateTime.now().hour, minute: DateTime.now().minute, second: DateTime.now().second)
                     });
+                    // widget.mySelectedEvents.forEach((key, value) {
+                    //   DateTime today = widget.selectedDate.copyWith(hour: 0, minute: 0, second: 0, microsecond: 0, millisecond: 0);
+                    //   print(today);
+                    //   print(widget.selectedDate);
+                    //   print(key);
+                    //   value.forEach((element) {
+                    //     print(element.title);
+                    //   });
+                    // });
                     titleController.clear();
                     descController.clear();
                     widget.panelController.close();
